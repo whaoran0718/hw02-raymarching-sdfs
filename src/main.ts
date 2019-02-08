@@ -1,4 +1,4 @@
-import {vec2, vec3} from 'gl-matrix';
+import {vec2, vec3, vec4} from 'gl-matrix';
 import * as Stats from 'stats-js';
 import * as DAT from 'dat-gui';
 import Square from './geometry/Square';
@@ -10,8 +10,16 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
-  tesselations: 5,
-  'Load Scene': loadScene, // A function pointer, essentially
+  color: '#3750ae',
+  petal: 5,
+
+  get Colorfv() {
+    let decCol = parseInt(this.color.slice(1), 16);
+    let r = (decCol >> 16) & 255;
+    let g = (decCol >> 8) & 255;
+    let b = decCol & 255;
+    return vec4.fromValues(r / 255.0, g / 255.0, b / 255.0, 1);
+  }
 };
 
 let square: Square;
@@ -47,6 +55,8 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
+  gui.addColor(controls, "color");
+  gui.add(controls, 'petal', 1, 10).step(1);
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -83,6 +93,8 @@ function main() {
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
     processKeyPresses();
+    flat.setColor(controls.Colorfv);
+    flat.setPetal(controls.petal);
     renderer.render(camera, flat, [
       square,
     ], time);
