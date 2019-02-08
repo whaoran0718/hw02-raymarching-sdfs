@@ -1,7 +1,7 @@
 # Haoran Wei (82926501)
 
 ## Demo
-[Demo Page](http://whaoran0718.github.io/hw02-raymarching-sdfs)
+[Demo Page](https://whaoran0718.github.io/hw02-raymarching-sdfs/)
 
 ## Techniques
 ### Petal
